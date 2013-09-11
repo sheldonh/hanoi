@@ -91,3 +91,10 @@
              (all-moves (frame [3] [2] [1])) => [[1 0] [2 0] [2 1]]
              (all-moves (frame [3 2 1] [] [])) => [[0 1] [0 2]]))
 
+(facts "about `apply-move`"
+       (fact "returns the frame advanced by a move"
+             (apply-move (frame [3 2 1] [] []) (move 0 1)) => (frame [3 2] [1] [])
+             (apply-move (frame [3 2 1] [] []) (move 0 2)) => (frame [3 2] [] [1])
+             (apply-move (frame [3 2] [] [1]) (move 0 1)) => (frame [3] [2] [1])
+             (apply-move (frame [3] [2] [1]) (move 2 1)) => (frame [3] [2 1] [])))
+

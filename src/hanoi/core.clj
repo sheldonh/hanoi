@@ -6,6 +6,8 @@
 
 (defn game [& frames] (map (partial apply frame) frames))
 
+(defn move [src dst] (seq [src dst]))
+
 (defn valid-peg? [p]
   (or (empty? p)
       (let [s (seq p)]
@@ -48,4 +50,18 @@
              (< src-disc dst-disc)))))
 
 (defn all-moves [f] (filter (partial legal-move? f) (all-naive-moves f)))
+
+(defn apply-move [f m]
+  (let [src (first m)
+        dst (second m)
+        disc (last (nth f src))]
+    (for [i (range 0 (count f))
+          :let [p (nth f i)]]
+      (seq
+        (cond (= i src)
+              (drop-last p)
+              (= i dst)
+              (reverse (cons disc p)) ; Use vectors to get rid of reverse()?
+              :default
+              p)))))
 
