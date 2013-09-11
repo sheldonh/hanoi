@@ -85,3 +85,9 @@
                (complete-game? (game)) => false
                (valid-game? (game)) => true :times (range))))
 
+(facts "about `all-moves`"
+       (fact "returns all legal moves possible from the current frame"
+             (all-moves (frame)) => empty?
+             (all-moves (frame [3] [2] [1])) => [[1 0] [2 0] [2 1]]
+             (all-moves (frame [3 2 1] [] [])) => [[0 1] [0 2]]))
+

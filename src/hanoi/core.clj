@@ -32,3 +32,20 @@
 (defn complete-game? [g] (every? empty? (butlast (last g))))
 
 (defn winning-game? [g] (and (valid-game? g) (complete-game? g)))
+
+(defn- all-naive-moves [f]
+  (let [num-pegs (count f)]
+    (for [src (range 0 num-pegs)
+          dst (range 0 num-pegs)
+          :when (not= src dst)]
+      [src dst])))
+
+(defn- legal-move? [f [src dst]]
+  (let [src-disc (last (nth f src))
+        dst-disc (last (nth f dst))]
+    (and (not (nil? src-disc))
+         (or (nil? dst-disc)
+             (< src-disc dst-disc)))))
+
+(defn all-moves [f] (filter (partial legal-move? f) (all-naive-moves f)))
+
