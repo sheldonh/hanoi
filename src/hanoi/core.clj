@@ -28,3 +28,7 @@
   (and (every-frame-distinct? g)
        (every-frame-valid? g)
        (every-frame-same-disc-count? g)))
+
+(defn complete-game? [g] (every? empty? (butlast (last g))))
+
+(defn winning-game? [g] (and (valid-game? g) (complete-game? g)))

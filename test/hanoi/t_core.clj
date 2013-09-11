@@ -61,3 +61,27 @@
              (valid-game? (game (frame [3 2 1] [] []) (frame [3 2] [] []) (frame [3] [2] []))) => false
              (valid-game? (game (frame [3 2 1] [] []) (frame [4 3 2] [1] []) (frame [4 3] [1] [2]))) => false))
 
+(facts "about `complete-game?`"
+       (fact "is true if all but the last peg is empty in the last frame of the game"
+             (complete-game? (game)) => true
+             (complete-game? (game (frame [] [] [3 2 1]))) => true
+             (complete-game? (game (frame [] [] [1]))) => true)
+       (fact "is false if any but the last peg is empty in the last frame of the game"
+             (complete-game? (game (frame [] [1] [3 2]))) => false)
+       (fact "is true even if the game is not valid"
+             (complete-game? (game (frame [] [] [1 2 3]))) => true))
+
+(facts "about `winning-game?`"
+       (fact "is true if the game is valid and complete"
+             (winning-game? (game)) => true)
+       (fact "is false if the game is not valid"
+             (winning-game? (game)) => false
+             (provided
+               (valid-game? (game)) => false)
+               (complete-game? (game)) => true :times (range))
+       (fact "is false if the game is not complete"
+             (winning-game? (game)) => false
+             (provided
+               (complete-game? (game)) => false
+               (valid-game? (game)) => true :times (range))))
+
