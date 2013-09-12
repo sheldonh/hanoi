@@ -1,17 +1,16 @@
 (ns hanoi.core)
 
-(defn peg [& discs] (seq discs))
+(defn peg [& discs] (vec discs))
 
-(defn frame [& pegs] (map (partial apply peg) pegs))
+(defn frame [& pegs] (vec pegs))
 
-(defn game [& frames] (map (partial apply frame) frames))
+(defn game [& frames] (vec frames))
 
-(defn move [src dst] (seq [src dst]))
+(defn move [src dst] (vector src dst))
 
 (defn valid-peg? [p]
   (or (empty? p)
-      (let [s (seq p)]
-        (= s (-> s sort distinct reverse)))))
+      (= p (-> p sort distinct reverse))))
 
 (defn every-disc-distinct? [f] (let [discs (apply concat f)] (= discs (distinct discs))))
 
@@ -20,7 +19,7 @@
        (every-disc-distinct? f)))
 
 (defn every-frame-valid? [g] (every? valid-frame? g))
-(defn every-frame-distinct? [g] (= g (distinct g)))
+(defn every-frame-distinct? [g] (= (count g) (count (distinct g))))
 (defn every-frame-same-disc-count? [g]
   (or (empty? g)
       (let [frame-counts (map (fn [f] (reduce #(+ %1 (count %2)) (count (first f)) (rest f))) g)]
@@ -57,11 +56,11 @@
         disc (last (nth f src))]
     (for [i (range 0 (count f))
           :let [p (nth f i)]]
-      (seq
+      (vec
         (cond (= i src)
-              (drop-last p)
+              (vec (drop-last p))
               (= i dst)
-              (reverse (cons disc p)) ; Use vectors to get rid of reverse()?
+              (conj p disc)
               :default
               p)))))
 
