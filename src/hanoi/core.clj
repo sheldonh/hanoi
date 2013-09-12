@@ -54,13 +54,36 @@
   (let [src (first m)
         dst (second m)
         disc (last (nth f src))]
-    (for [i (range 0 (count f))
-          :let [p (nth f i)]]
-      (vec
-        (cond (= i src)
-              (vec (drop-last p))
-              (= i dst)
-              (conj p disc)
-              :default
-              p)))))
+    (vec
+      (for [i (range 0 (count f))
+            :let [p (nth f i)]]
+          (cond (= i src)
+                (vec (drop-last p))
+                (= i dst)
+                (conj p disc)
+                :default
+                p)))))
+
+(defn advance-game [g]
+  (let [f (last g)]
+    (for [m (all-moves f)]
+      (conj g (apply-move f m)))))
+
+(defn winning-games [games]
+  (do (println "considering" (count games) "games")
+    (let [step (fn [g] (if (complete-game? g)
+                           (list g)
+                           (advance-game g)))]
+    (if (every? winning-game? games)
+        (do (println "Found" (count games) "winning games")
+            games)
+        (recur (filter valid-game? (apply concat (map step games))))))))
+
+(defn play [g]
+  (let [winners (winning-games [g])
+        winner (first (sort-by count winners))
+        frames (count winner)
+        moves (dec frames)]
+    (do (println "Returning shortest winning game of" moves "moves /" frames "frames")
+        winner)))
 

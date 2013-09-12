@@ -98,3 +98,8 @@
              (apply-move (frame [3 2] [] [1]) (move 0 1)) => (frame [3] [2] [1])
              (apply-move (frame [3] [2] [1]) (move 2 1)) => (frame [3] [2 1] [])))
 
+(facts "about `advance-game`"
+       (fact "maps all moves over the last frame of the game"
+             (advance-game (game (frame [3 2 1] [] []))) => (list (game (frame [3 2 1] [] []) (frame [3 2] [1] []))
+                                                                  (game (frame [3 2 1] [] []) (frame [3 2] [] [1])))))
+
