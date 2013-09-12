@@ -87,3 +87,12 @@
     (do (println "Returning shortest winning game of" moves "moves /" frames "frames")
         winner)))
 
+(defn print-game [g]
+  (let [longest-peg (last (sort-by count (map pr-str (apply concat g))))
+        peg-format (str "%-" (+ 2 (count longest-peg)) "s")]
+    (doseq [f g]
+      (let [pegs (map pr-str f)
+            formatted-pegs (map (partial format peg-format) pegs)
+            formatted-frame (clojure.string/join formatted-pegs)]
+        (println formatted-frame)))))
+
