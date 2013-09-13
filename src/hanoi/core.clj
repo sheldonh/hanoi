@@ -19,7 +19,9 @@
        (every-disc-distinct? f)))
 
 (defn every-frame-valid? [g] (every? valid-frame? g))
-(defn every-frame-distinct? [g] (= (count g) (count (distinct g))))
+(defn every-frame-distinct? [g]
+  (or (complete-game? g)
+      (= (count g) (count (distinct (map (partial sort-by count) (map drop-last g)))))))
 (defn every-frame-same-disc-count? [g]
   (or (empty? g)
       (let [frame-counts (map (fn [f] (reduce #(+ %1 (count %2)) (count (first f)) (rest f))) g)]
@@ -85,6 +87,16 @@
         frames (count winner)
         moves (dec frames)]
     (do (println "Returning shortest winning game of" moves "moves /" frames "frames")
+        (println "(There were" (count (filter #(= (count %) frames) winners)) "games of the same length)")
+        winner)))
+
+(defn play-badly [g]
+  (let [winners (winning-games [g])
+        winner (first (sort-by count winners))
+        frames (count winner)
+        moves (dec frames)]
+    (do (println "Returning shortest winning game of" moves "moves /" frames "frames")
+        (println "(There were" (count (filter #(= (count %) frames) winners)) "games of the same length)")
         winner)))
 
 (defn print-game [g]

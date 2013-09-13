@@ -54,6 +54,7 @@
              (valid-game? (game (frame [3 2 1] [] []))) => true
              (valid-game? (game (frame [3 2 1] [] []) (frame [3 2] [1] []) (frame [3] [1] [2]))) => true)
        (fact "is false if one or more frames is invalid"
+             (valid-game? (game (frame [3 2 1] [1] []) (frame [3 2 1] [] [1]))) => false
              (valid-game? (game (frame [3 2 1] [] []) (frame [3 2 1] [] [3 2 1]))) => false)
        (fact "is false if two or more frames are duplicated"
              (valid-game? (game (frame [3 2 1] [] []) (frame [3 2] [1] []) (frame [3 2 1] [] []))) => false)
@@ -102,4 +103,3 @@
        (fact "maps all moves over the last frame of the game"
              (advance-game (game (frame [3 2 1] [] []))) => (list (game (frame [3 2 1] [] []) (frame [3 2] [1] []))
                                                                   (game (frame [3 2 1] [] []) (frame [3 2] [] [1])))))
-
